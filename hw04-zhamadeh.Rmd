@@ -1,0 +1,37 @@
+---
+title: "Hw04-zhamadeh"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r Loading_Tidyverse_Package}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(gapminder))
+```
+
+
+## Tidyr in a nutshell
+This is a quick look at the main functions of **tidyr** and how to use them
+
+### Gather function
+This method takes multiple columns from a dataset and condenses them into key-value pairs
+
+#### Gathering gapminder data
+
+```{r}
+gapminder 
+```
+
+
+#### Spreading gapminder data
+We can take tidy gapminder data and reshape it by spreading the continent variable into multiple columns where each column represents each continent and each value underneath becomes the year. Of course this leaves us with many *NAs* but its just interesting to see.
+
+```{r}
+gapminder %>%
+  spread(continent, year) #spread continent by year
+```
+
+
