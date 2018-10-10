@@ -145,12 +145,10 @@ knitr::kable(unreshap_gap) #print out table
 unreshap_gap %>% # take our filtered data  before reshaping
   ggplot(aes(year,lifeExp)) + #plot lifeExp vs year
   geom_point(aes(colour=country)) +  #scatterplot for each country
-  geom_smooth(aes(line=country, colour=country),se=FALSE) + #add line connecting each countries points
+  geom_smooth(aes(linetype=country, colour=country),se=FALSE) + #add line connecting each countries points
   labs(x="Year", y="Life Expectancy", title="Life Expectancy for Canada, France and China") + #add labels
   theme_classic() #change theme
 ```
-
-    ## Warning: Ignoring unknown aesthetics: line
 
     ## `geom_smooth()` using method = 'loess' and formula 'y ~ x'
 
