@@ -75,26 +75,7 @@ Now that we have our filtered dataset, we can reshape things. We will use the `s
 ``` r
 reshape_gap <- filt_gap %>%
   spread(country, lifeExp) #spread country across columns and fill in lifeExp data
-reshape_gap
-```
 
-    ## # A tibble: 12 x 4
-    ##     year Canada China France
-    ##    <int>  <dbl> <dbl>  <dbl>
-    ##  1  1952   68.8  44     67.4
-    ##  2  1957   70.0  50.5   68.9
-    ##  3  1962   71.3  44.5   70.5
-    ##  4  1967   72.1  58.4   71.6
-    ##  5  1972   72.9  63.1   72.4
-    ##  6  1977   74.2  64.0   73.8
-    ##  7  1982   75.8  65.5   74.9
-    ##  8  1987   76.9  67.3   76.3
-    ##  9  1992   78.0  68.7   77.5
-    ## 10  1997   78.6  70.4   78.6
-    ## 11  2002   79.8  72.0   79.6
-    ## 12  2007   80.7  73.0   80.7
-
-``` r
 knitr::kable(reshape_gap) #present in table
 ```
 

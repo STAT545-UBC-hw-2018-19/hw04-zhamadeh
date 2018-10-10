@@ -39,7 +39,7 @@ Now that we have our filtered dataset, we can reshape things. We will use the `s
 ```{r}
 reshape_gap <- filt_gap %>%
   spread(country, lifeExp) #spread country across columns and fill in lifeExp data
-reshape_gap
+
 knitr::kable(reshape_gap) #present in table
 ```
 
