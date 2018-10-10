@@ -1,37 +1,123 @@
 ---
 title: "Hw04-zhamadeh"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Data Reshaping Prompts (and relationship to aggregation)
+**Problem**: You have data in one “shape” but you wish it were in another. Usually this is because the alternative shape is superior for presenting a table, making a figure, or doing aggregation and statistical analysis.
+
+**Solution**: Reshape your data. For simple reshaping, gather() and spread() from tidyr will suffice. Do the thing that is possible / easier now that your data has a new shape.
+
+### Activity #2
+* Make a tibble with one row per year and columns for life expectancy for two or more countries.
+    *   Use knitr::kable() to make this table look pretty in your rendered homework.
+    *   Take advantage of this new data shape to scatterplot life expectancy for one country against that of another.
+    
+For this activity, we're going to bring in our rectangular dataset, gapminder, and use `filter()` and `select()` to look at life expectancy for 3 different countries. First lets begin by loading our packages.
+
 ```{r Loading_Tidyverse_Package}
 suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(gapminder))
 ```
 
+Now we're going to filter our dataset for the life expectancy data on Canada, China and France.
 
-## Tidyr in a nutshell
-This is a quick look at the main functions of **tidyr** and how to use them
+```{r Filtering_Gapminder}
+filt_gap <- gapminder %>%
+  filter(country %in% c("Canada","France","China")) %>% #filter for countries of interest
+  select(country, year, lifeExp) # select only country, year and life expectancy
 
-### Gather function
-This method takes multiple columns from a dataset and condenses them into key-value pairs
+knitr::kable(filt_gap) #print out in table
+```
 
-#### Gathering gapminder data
+Now that we have our filtered dataset, we can reshape things. We will use the `spread()` function to split up country and use our variable life expectancy to create columns of life expectancy specific to each country.
 
 ```{r}
-gapminder 
+reshape_gap <- filt_gap %>%
+  spread(country, lifeExp) #spread country across columns and fill in lifeExp data
+reshape_gap
+knitr::kable(reshape_gap) #present in table
+```
+
+Now that we've successfully reshaped our filtered data lets plot life expectancy over time using ggplot2. It would be easier to use our filtered data before reshaping, however to demonstrate the use of the `gather()` function, we will revert our reshaped data back to its un-reshaped form using this method.
+
+```{r}
+unreshap_gap <- reshape_gap %>%
+  gather(country, lifeExp, Canada, China, France) #gather columns of country and make one lifeExp column
+knitr::kable(unreshap_gap) #print out table
 ```
 
 
-#### Spreading gapminder data
-We can take tidy gapminder data and reshape it by spreading the continent variable into multiple columns where each column represents each continent and each value underneath becomes the year. Of course this leaves us with many *NAs* but its just interesting to see.
+```{r}
+unreshap_gap %>% # take our filtered data  before reshaping
+  ggplot(aes(year,lifeExp)) + #plot lifeExp vs year
+  geom_point(aes(colour=country)) +  #scatterplot for each country
+  geom_smooth(aes(line=country, colour=country),se=FALSE) + #add line connecting each countries points
+  labs(x="Year", y="Life Expectancy", title="Life Expectancy for Canada, France and China") + #add labels
+  theme_classic() #change theme
+
+```
+
+Success! We can see from the plot that Canada and France have had similar trajectories for life expectancy over time with Canada being only a year or two higher in the mid-90's, a difference that becomes negligible by 2000. China has a significantly lower life expectancy by over 25 years in the mid-90's only to minimize that gap to about 10 years. 
+
+##Join Prompts (join, merge, look up)
+**Problem**: You have two data sources and you need info from both in one new data object.
+
+**Solution**: Perform a join, which borrows terminology from the database world, specifically SQL.
+
+### Activity #1
+
+Create a second data frame, complementary to Gapminder. Join this with (part of) Gapminder using a dplyr join function and make some observations about the process and result. Explore the different types of joins. Examples of a second data frame you could build:
+* One row per country, a country variable and one or more variables with extra info, such as language spoken, NATO membership, national animal, or capitol city.
+* One row per continent, a continent variable and one or more variables with extra info, such as northern versus southern hemisphere.
+
+
+Here, lets make a complementary dataframe to gapminder that describes the national animal of several countries.
+
+```{r creating_dataframe}
+nat_animal <- c("Bald eagle", "Tiger","Beaver", "Swan", "Rooster", "Lion") #country animal
+country <- c("United States","Bangladesh","Canada","Denmark","France", "Libya") #country
+
+count_animal <- data.frame(country, nat_animal) #make data frame of two vectors
+
+knitr::kable(count_animal, col.names=c("Country","National Animal")) #print out table with labels
+
+```
+
+Now lets join this new dataframe with gapminder using the `inner_join(x,y)` method which returns all rows from x, where there are a matching value of y, and all columns from x and y. Note, because list of national animals is missing some countries, the observations for these countries were excluded.
 
 ```{r}
-gapminder %>%
-  spread(continent, year) #spread continent by year
+inner_join <- inner_join(gapminder, count_animal) #join datasets
+
+knitr::kable(inner_join) # print table
 ```
+
+Now lets use `semi_join(x,y)` to join these two data frames. This function returns all rows from x where there are a matching value of y, keeping just columns from x. Note here we don't add the column for country aninmal, we only keep the observations of gapminder that have a corresponding national animal from our data set.
+```{r}
+(semi_join <- semi_join(gapminder, count_animal)) # join datasets
+
+knitr::kable(semi_join) # print table
+```
+
+Alternatively, we can use the `anti_join(x,y)` function to retrieve the opposite results, observations from x (gapminder) that did not have a coressponding value in y (count_animal). This includes only countries which did not have a national animal mentioned in our dataset.
+
+```{r}
+anti_join <- anti_join(gapminder,count_animal) # join datasets
+
+knitr::kable(anti_join) #print table
+```
+
+Lastly, we can use the `full_join(x,y)` function to return all rows and columns from both x and y. This means our country animal column is added to gapminder but where there are missing values, NA is used.
+
+```{r}
+(full_join <- full_join(gapminder,count_animal))
+
+knitr::kable(full_join)
+```
+
 
 
