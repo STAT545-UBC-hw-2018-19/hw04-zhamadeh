@@ -394,28 +394,13 @@ knitr::kable(head(anti_join)) #print only the head of the table because its too 
 Lastly, we can use the `full_join(x,y)` function to return all rows and columns from both x and y. This means our country animal column is added to gapminder but where there are missing values, NA is used.
 
 ``` r
-(full_join <- full_join(gapminder,count_animal))
+full_join <- full_join(gapminder,count_animal)
 ```
 
     ## Joining, by = "country"
 
     ## Warning: Column `country` joining factors with different levels, coercing
     ## to character vector
-
-    ## # A tibble: 1,704 x 7
-    ##    country     continent  year lifeExp      pop gdpPercap nat_animal
-    ##    <chr>       <fct>     <int>   <dbl>    <int>     <dbl> <fct>     
-    ##  1 Afghanistan Asia       1952    28.8  8425333      779. <NA>      
-    ##  2 Afghanistan Asia       1957    30.3  9240934      821. <NA>      
-    ##  3 Afghanistan Asia       1962    32.0 10267083      853. <NA>      
-    ##  4 Afghanistan Asia       1967    34.0 11537966      836. <NA>      
-    ##  5 Afghanistan Asia       1972    36.1 13079460      740. <NA>      
-    ##  6 Afghanistan Asia       1977    38.4 14880372      786. <NA>      
-    ##  7 Afghanistan Asia       1982    39.9 12881816      978. <NA>      
-    ##  8 Afghanistan Asia       1987    40.8 13867957      852. <NA>      
-    ##  9 Afghanistan Asia       1992    41.7 16317921      649. <NA>      
-    ## 10 Afghanistan Asia       1997    41.8 22227415      635. <NA>      
-    ## # ... with 1,694 more rows
 
 ``` r
 knitr::kable(head(full_join)) # only first few because its so long

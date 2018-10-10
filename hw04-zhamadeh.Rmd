@@ -114,7 +114,7 @@ knitr::kable(head(anti_join)) #print only the head of the table because its too 
 Lastly, we can use the `full_join(x,y)` function to return all rows and columns from both x and y. This means our country animal column is added to gapminder but where there are missing values, NA is used.
 
 ```{r}
-(full_join <- full_join(gapminder,count_animal))
+full_join <- full_join(gapminder,count_animal)
 
 knitr::kable(head(full_join)) # only first few because its so long
 ```
