@@ -98,7 +98,7 @@ knitr::kable(inner_join) # print table
 
 Now lets use `semi_join(x,y)` to join these two data frames. This function returns all rows from x where there are a matching value of y, keeping just columns from x. Note here we don't add the column for country aninmal, we only keep the observations of gapminder that have a corresponding national animal from our data set.
 ```{r}
-(semi_join <- semi_join(gapminder, count_animal)) # join datasets
+semi_join <- semi_join(gapminder, count_animal) # join datasets
 
 knitr::kable(semi_join) # print table
 ```
